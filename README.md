@@ -43,4 +43,6 @@ Stretch goals:
 
 6. Animations to pop up new items purchased. 
 
+7. At start of game, avatar could slide in slowly from right side as if walking in place of living for the first time.
+
 
