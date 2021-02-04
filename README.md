@@ -45,4 +45,6 @@ Stretch goals:
 
 7. At start of game, avatar could slide in slowly from right side as if walking in place of living for the first time.
 
+8. At start of game, memory wall frames could fall from top into place at staggered times. 
+
 
