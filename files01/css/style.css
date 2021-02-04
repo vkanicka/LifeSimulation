@@ -1,0 +1,104 @@
+/* gold gridlines for layout alignment:  */
+/* * { border: 1px solid gold} */
+
+body {
+  background-color: #5C5D67;
+  color: #D0DB97;
+  font-family: 'Montserrat', sans-serif;
+  font-size:25px;
+}
+
+#phoneScreen {
+  background-color: black;
+  height: 500px;
+  width: 300px;
+  padding: 20px;
+  border-radius: 20px;
+
+}
+
+#calendar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  margin: 10px;
+}
+
+#time {
+  font-size: 50px;
+  color: rgb(255,100,78);
+  font-weight: bold;
+}
+
+#day {
+  color: gray;
+  font-size: 35px;
+}
+
+#phoneButtons {
+  display: flex;
+  flex-wrap: wrap;
+
+
+}
+
+.phoneButton {
+  font-size: 17px;
+  text-align: center;
+  height: 80px;
+  width: 60px;
+  margin: 10px;
+  flex-basis: 1 1 0px;
+  flex-grow: 1;
+  border-radius: 10px;
+  font-family: 'Montserrat', sans-serif;
+  background-color: rgb(5, 168, 157);
+  font-weight: bold;
+
+}
+
+.phoneButton:hover {
+  background-color: #13CCC1;
+}
+
+#perfMeters {
+  margin: 10px 0px;
+}
+
+.meterDiv {
+  display: flex;
+  align-content: center;
+  justify-content: space-around;
+}
+
+.meter {
+  display: flex;
+  align-self: center;
+}
+
+progress {
+  border-radius:1px;
+  width: 80%;
+  height: 20px;
+  margin: 0% 0%;
+  border: 2px solid rgb(119,255,235);
+  /* border-right: 2px solid rgb(119,255,235);
+  border-bottom: 2px solid rgb(119,255,235);
+  border-left: 2px solid rgb(119,255,235); */
+}
+
+progress::-webkit-progress-bar {
+  background-color: black;
+  border-radius:1px;
+
+
+}
+
+progress::-webkit-progress-value {
+  background-color: rgb(119,255,235);
+  border-radius:1px;
+  transition: .25s;
+  transition-timing-function: ease;
+
+}
