@@ -55,7 +55,7 @@ const randomizeColor=()=>{
 
 const game = {
 
-  // if/wher to add place of living - inventory or separate opject
+  // if/where to add place of living - inventory or separate opject
 
   avatar: {
       perf: {
