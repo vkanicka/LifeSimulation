@@ -1,0 +1,65 @@
+/* gold gridlines for layout alignment:  */
+/* * { border: 1px solid gold} */
+
+body {
+  background-color: black;
+  color: gray;
+  font-family: 'Montserrat', sans-serif;
+  font-size:20px;
+  margin: 20px;
+
+  /* display: flex;
+  flex-direction: column; */
+
+}
+
+.half {
+  height: 300px;
+  width: 800px;
+  background-repeat: no-repeat, repeat;
+  background-size: 100%;
+
+}
+
+#top {
+  background-image: url('https://i.imgur.com/wfEyvQ1.png');
+  background-position: center bottom;
+  margin-bottom: 20px;
+  display:grid;
+  /* display: flex;
+  flex-direction: center;
+  align-content: flex-end; */
+
+}
+
+#bottom {
+  background-image: url('https://i.imgur.com/N4oICFF.png');
+  background-position: left bottom;
+  margin-top: 20px;
+
+}
+
+#imgTopDiv {
+  position: relative;
+
+}
+
+#avatar {
+  width: 90px;
+  position:absolute;
+  bottom: 20px;
+  left: 400px;
+}
+
+#mattress {
+  width: 300px;
+  position: absolute;
+  bottom: 10px;
+
+}
+
+#phoneIMG {
+  height: 300px;
+  width: 200px;
+  float: right;
+}

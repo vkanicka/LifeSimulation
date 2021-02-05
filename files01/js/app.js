@@ -63,18 +63,30 @@ const game = {
           social: 0,
           health: 20,
           happiness: 5,
-          skills: 0
+          skills: 200
       },
       inventory:{
 
       },
       job: {
           name: 'Coffee Barista',
-          pay: 10,
+          pay: (8*7.25),
           happiness: -5,
           skills: 10
       },
+      relationships:{
+
+      },
+      exercises:{
+        level1: {
+          name: 'Free Beginner Yoga Video',
+          health: 5,
+          cost: 0,
+          happiness: 5
+        }
+      },
       skills: {
+
 
       },
       milestones: {
@@ -82,6 +94,32 @@ const game = {
       }
   },
   phone: {
+    clock: {
+      hour: 7,
+      amPM: 'AM'
+    },
+    calendar: {
+      day: 1,
+      year: 1,
+      newDay: () => {
+        game.phone.calendar.day +=1
+        $('#day').text(`Day ${game.phone.calendar.day} Year ${game.phone.calendar.year}`)
+        game.phone.clock.hour = 7
+        game.phone.clock.amPM = 'AM'
+        $('#time').text(`${game.phone.clock.hour}:00 ${game.phone.clock.amPM}`)
+        game.avatar.perf.health+=5
+        game.avatar.perf.happiness+=5
+      },
+      checkIfDayShouldEnd: () => { // what happens if user attempts activity that would go past midnight -- need a function for phone to check if enough time, or plan if stayed up too late
+        if(game.phone.clock.hour === 12 && game.phone.clock.amPM === 'PM') {
+          game.phone.calendar.newDay()}
+      }
+    },
+    incrementClock:(hours) => { // move this under clock!!!
+      game.phone.clock.hour+=hours
+      if (game.phone.clock.hour>12) {game.phone.clock.hour-=12; if (game.phone.clock.amPM == 'AM') {game.phone.clock.amPM = 'PM'} else {game.phone.clock.amPM='AM'}}
+      $('#time').text(`${game.phone.clock.hour}:00 ${game.phone.clock.amPM}`)
+    },
     updateMeters: () => {
       $('#wealthMeter').attr('value',game.avatar.perf.wealth)
       $('#socialMeter').attr('value',game.avatar.perf.social)
@@ -93,6 +131,7 @@ const game = {
       game.avatar.perf.wealth+=game.avatar.job.pay
       game.avatar.perf.happiness+=game.avatar.job.happiness
       game.avatar.perf.skills+=game.avatar.job.skills
+      game.phone.incrementClock(8)
       game.phone.updateMeters()
     },
     shop: ()=>{
@@ -100,19 +139,26 @@ const game = {
       game.phone.updateMeters()
     },
     learn: ()=>{
+      game.avatar.perf.skills+=100
+      game.phone.incrementClock(1)
 
       game.phone.updateMeters()
     },
     exercise: ()=>{
-
+      game.avatar.perf.health+=game.avatar.exercises.level1.health
+      game.avatar.perf.wealth+=game.avatar.exercises.level1.cost
+      game.avatar.perf.happiness+=game.avatar.exercises.level1.happiness
+      game.phone.incrementClock(1)
       game.phone.updateMeters()
     },
     socialize: ()=>{
-
+      game.avatar.perf.social+=5
+      game.avatar.perf.happiness+=5
+      game.phone.incrementClock(2)
       game.phone.updateMeters()
     },
     relax: ()=>{
-
+      game.phone.calendar.newDay()
       game.phone.updateMeters()
     }
   },
@@ -127,6 +173,7 @@ const game = {
 
   },
   exerciseLibrary: {
+    level1: {name: 'Free Beginner Yoga Video',points: 5}
 
   },
   people: {
@@ -141,13 +188,15 @@ const game = {
 
 //JQUERY SETUP
 $(() => {
-
+  game.phone.updateMeters()
   $('#workButton').on('click',game.phone.work)
   $('#shopButton').on('click',game.phone.shop)
   $('#learnButton').on('click',game.phone.learn)
   $('#fitButton').on('click',game.phone.exercise)
   $('#socialButton').on('click',game.phone.socialize)
   $('#relaxButton').on('click',game.phone.relax)
+
+
 
 
   });

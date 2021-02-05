@@ -55,6 +55,7 @@ body {
   font-family: 'Montserrat', sans-serif;
   background-color: rgb(5, 168, 157);
   font-weight: bold;
+  outline: 0;
 
 }
 
@@ -70,11 +71,14 @@ body {
   display: flex;
   align-content: center;
   justify-content: space-around;
+
 }
 
 .meter {
   display: flex;
   align-self: center;
+  border-radius:1px;
+
 }
 
 progress {
@@ -89,7 +93,7 @@ progress {
 }
 
 progress::-webkit-progress-bar {
-  background-color: black;
+  background-color: rgb(52,73,94);
   border-radius:1px;
 
 
@@ -100,5 +104,7 @@ progress::-webkit-progress-value {
   border-radius:1px;
   transition: .25s;
   transition-timing-function: ease;
+  /* margin: 1px; */
+  border: 2px solid rgb(52,73,94);
 
 }
