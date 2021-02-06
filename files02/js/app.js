@@ -137,12 +137,12 @@ const learningLibrary = {
 }
 
 const exerciseLibrary = {
-  level1: {name: 'Free Beginner Yoga Video', points: 5}
+  level1: {name: 'Free Beginner Yoga Video', health: 5, happiness: 5, cost: 0, social: 0}
 }
 
 const people = {
 
-} 
+}
 
 const relaxation =  {
 
@@ -246,9 +246,9 @@ const game = {
       game.phone.updateMeters()
     },
     exercise: ()=>{
-      game.avatar.perf.health+=game.avatar.exercises.level1.health
-      game.avatar.perf.wealth+=game.avatar.exercises.level1.cost
-      game.avatar.perf.happiness+=game.avatar.exercises.level1.happiness
+      game.avatar.perf.health+=game.avatar.exerciseLevel.health
+      game.avatar.perf.wealth+=game.avatar.exerciseLevel.cost
+      game.avatar.perf.happiness+=game.avatar.exerciseLevel.happiness
       game.phone.incrementClock(1)
       game.phone.updateMeters()
     },
