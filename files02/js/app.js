@@ -142,7 +142,7 @@ const exerciseLibrary = {
 
 const people = {
 
-}
+} 
 
 const relaxation =  {
 
