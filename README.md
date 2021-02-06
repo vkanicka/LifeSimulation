@@ -47,4 +47,8 @@ Stretch goals:
 
 8. At start of game, memory wall frames could fall from top into place at staggered times. 
 
+9. Hover over meters show values
+
+10. Click on areas of house to updgrade - even if it just opens shop, maybe a section of items for floor, wall, etc
+
 
