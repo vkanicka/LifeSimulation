@@ -69,10 +69,62 @@ const game = {
 
       },
       job: {
+        barista: {
           name: 'Coffee Barista',
-          pay: (8*7.25),
+          pay: 400,
           happiness: -5,
-          skills: 10
+          skills: 10,
+          time: 8
+        },
+        manager: {
+          name: 'Coffee Shop Manager',
+          pay: 610,
+          happiness: -8,
+          skills: 15,
+          time: 8
+        },
+        dataEntry: {
+          name: 'Part-Time Data Entry Specialist',
+          pay: 250,
+          happiness: -8,
+          skills: 15,
+          time: 4
+        },
+        seniorDataEntry: {
+          name: 'Part-Time Data Entry Associate',
+          pay: 300,
+          happiness: -1,
+          skills: 15,
+          time: 4
+        },
+        juniorDev: {
+          name: 'Junior Software Developer',
+          pay: 1250,
+          happiness: +1,
+          skills: 25,
+          time: 8
+        },
+        midDev: {
+          name: 'Mid Level Software Developer',
+          pay: 1731,
+          happiness: +5,
+          skills: 50,
+          time: 8
+        },
+        seniorDev: {
+          name: 'Senior Software Developer',
+          pay: 2308,
+          happiness: +10,
+          skills: 75,
+          time: 8
+        },
+        cto: {
+          name: 'CTO',
+          pay: 10416,
+          happiness: +5,
+          skills: 100,
+          time: 8
+        }
       },
       relationships:{
 

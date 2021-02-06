@@ -30,6 +30,21 @@ body {
   margin-top: 20px;
 }
 
+#jobDisplay {
+  position: absolute;
+  color: whitesmoke;
+  background-color: rgba(110, 98, 89,.7);
+  letter-spacing: 1.5px;
+  line-height: 500%;
+  border-radius: 10px;
+  top: 50px;
+  left: 50px;
+  font-size: 10px;
+  margin: 0px;
+  padding: 10px;
+  line-height: 80%;
+}
+
 #imgTopDiv {
   position: relative;
 }
@@ -173,7 +188,7 @@ body {
   font-weight: bold;
 }
 
-#day {
+#week {
   color: gray;
   font-size: 17px;
 }

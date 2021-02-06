@@ -53,41 +53,136 @@ const randomizeColor=()=>{
   return `rgb(${rando(150,255)},${rando(100,255)},${rando(0,255)}`
 }
 
+const jobMarket = {
+  barista: {
+    title: 'Coffee Barista',
+    id: 'barista',
+    pay: 400,
+    happiness: -5,
+    skills: 1,
+    time: 8,
+    xp: 0
+  },
+  manager: {
+    title: 'Coffee Shop Manager',
+    id: 'manager',
+    pay: 610,
+    happiness: -8,
+    skills: 1,
+    time: 8,
+    xp: 5
+  },
+  dataEntry: {
+    title: 'Part-Time Data Entry Specialist',
+    id: 'dataEntry',
+    pay: 250,
+    happiness: -8,
+    skills: 1,
+    time: 4,
+    xp: 10
+  },
+  seniorDataEntry: {
+    title: 'Part-Time Data Entry Associate',
+    id: 'seniorDataEntry',
+    pay: 300,
+    happiness: -1,
+    skills: 1,
+    time: 4,
+    xp: 15
+  },
+  juniorDev: {
+    title: 'Junior Software Developer',
+    id: 'juniorDev',
+    pay: 1250,
+    happiness: +1,
+    skills: 1,
+    time: 8,
+    xp: 20
+  },
+  midDev: {
+    title: 'Mid Level Software Developer',
+    id: 'midDev',
+    pay: 1731,
+    happiness: +5,
+    skills: 1,
+    time: 8,
+    xp: 25
+  },
+  seniorDev: {
+    title: 'Senior Software Developer',
+    id: 'seniorDev',
+    pay: 2308,
+    happiness: +10,
+    skills: 1,
+    time: 8,
+    xp: 30
+  },
+  cto: {
+    title: 'CTO',
+    id: 'cto',
+    pay: 10416,
+    happiness: +5,
+    skills: 1,
+    time: 8,
+    xp: 35
+  }
+}
+
+const store =  {
+
+}
+
+const learningLibrary = {
+
+}
+
+const exerciseLibrary = {
+  level1: {name: 'Free Beginner Yoga Video', points: 5}
+}
+
+const people = {
+
+}
+
+const relaxation =  {
+
+}
+
 
 const game = {
 
-  // if/where to add place of living - inventory or separate opject
-
   avatar: {
       perf: {
-          wealth: 200,
+          wealth: 0,
           social: 0,
           health: 20,
-          happiness: 5,
-          skills: 200
+          happiness: 0,
+          skills: 0
       },
       inventory:{
 
       },
-      job: {
-          name: 'Coffee Barista',
-          pay: (8*7.25),
-          happiness: -5,
-          skills: 10
+
+      job: jobMarket.barista,
+      getJob: (jobTitle)=>{
+        game.avatar.job = jobMarket[jobTitle]
+        $('#jobTitleDisplay').text(`Job: ${game.avatar.job.title}`)
+        $('#jobPayDisplay').text(`Pay: $${game.avatar.job.pay}/wk`)
       },
+      getPromotion: ()=>{
+        if(game.avatar.job.title !='CTO') {
+          if(game.avatar.perf.skills === jobMarket[Object.keys(jobMarket)[Object.keys(jobMarket).indexOf(game.avatar.job.id)+1]].xp) {game.avatar.getJob(( jobMarket[Object.keys(jobMarket)[Object.keys(jobMarket).indexOf(game.avatar.job.id)+1]]).id)
+          alert(`Congrats! You've been promoted to ${game.avatar.job.title}!`)}
+        }
+      },
+
       relationships:{
 
       },
-      exercises:{
-        level1: {
-          name: 'Free Beginner Yoga Video',
-          health: 5,
-          cost: 0,
-          happiness: 5
-        }
-      },
-      skills: {
 
+      exerciseLevel: exerciseLibrary.level1,
+
+      skills: {
 
       },
       milestones: {
@@ -100,20 +195,20 @@ const game = {
       amPM: 'AM'
     },
     calendar: {
-      day: 1,
+      week: 1,
       year: 1,
-      newDay: () => {
-        game.phone.calendar.day +=1
-        $('#day').text(`Day ${game.phone.calendar.day} Year ${game.phone.calendar.year}`)
+      newWeek: () => {
+        game.phone.calendar.week +=1
+        $('#week').text(`Week ${game.phone.calendar.week} Year ${game.phone.calendar.year}`)
         game.phone.clock.hour = 7
         game.phone.clock.amPM = 'AM'
         $('#time').text(`${game.phone.clock.hour}:00 ${game.phone.clock.amPM}`)
         game.avatar.perf.health+=5
         game.avatar.perf.happiness+=5
       },
-      checkIfDayShouldEnd: () => { // what happens if user attempts activity that would go past midnight -- need a function for phone to check if enough time, or plan if stayed up too late
+      checkIfWeekShouldEnd: () => { // what happens if user attempts activity that would go past midnight -- need a function for phone to check if enough time, or plan if stayed up too late
         if(game.phone.clock.hour === 12 && game.phone.clock.amPM === 'PM') {
-          game.phone.calendar.newDay()}
+          game.phone.calendar.newWeek()}
       }
     },
     incrementClock:(hours) => { // move this under clock!!!
@@ -127,6 +222,9 @@ const game = {
       $('#healthMeter').attr('value',game.avatar.perf.health)
       $('#happinessMeter').attr('value',game.avatar.perf.happiness)
       $('#skillsMeter').attr('value',game.avatar.perf.skills)
+
+      $('#bankAccountDisplay').text(`Bank Account: $${game.avatar.perf.wealth}`)
+      $('#workXPDisplay').text(`WorkXP: ${game.avatar.perf.skills}`)
     },
     work: ()=>{
       game.avatar.perf.wealth+=game.avatar.job.pay
@@ -134,13 +232,15 @@ const game = {
       game.avatar.perf.skills+=game.avatar.job.skills
       game.phone.incrementClock(8)
       game.phone.updateMeters()
+      setTimeout(function(){game.avatar.getPromotion()},100)
+
     },
     shop: ()=>{
 
       game.phone.updateMeters()
     },
     learn: ()=>{
-      game.avatar.perf.skills+=100
+      game.avatar.perf.skills+=1
       game.phone.incrementClock(1)
 
       game.phone.updateMeters()
@@ -159,31 +259,10 @@ const game = {
       game.phone.updateMeters()
     },
     relax: ()=>{
-      game.phone.calendar.newDay()
+      game.phone.calendar.newWeek()
       game.phone.updateMeters()
     }
-  },
-
-  jobMarket: {
-
-  },
-  store: {
-
-  },
-  learningLibrary: {
-
-  },
-  exerciseLibrary: {
-    level1: {name: 'Free Beginner Yoga Video',points: 5}
-
-  },
-  people: {
-
-  },
-  relaxation: {
-
   }
-
 }
 
 
@@ -196,6 +275,8 @@ $(() => {
   $('#fitButton').on('click',game.phone.exercise)
   $('#socialButton').on('click',game.phone.socialize)
   $('#relaxButton').on('click',game.phone.relax)
+
+  game.avatar.getJob('barista')
 
 
 
