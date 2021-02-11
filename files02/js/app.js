@@ -56,6 +56,7 @@ const randomizeColor=()=>{
 const game = {
 
   avatar: {
+      actions: ['work','study','exercise','social'],
       perf: {
           wealth: 0,
           social: 0,
@@ -85,45 +86,36 @@ const game = {
           state='default'
         }
         $('#avatar').attr('src',game.avatar.moodImages[state])
-
-        //change image
-
-      },
-      inventory:{
-
       },
 
-      job: 'unemployed',
-      getJob: (jobTitle)=>{
-        game.avatar.job = game.jobMarket[jobTitle]
-        $('#jobTitleDisplay').text(`Job: ${game.avatar.job.title}`)
-        $('#jobPayDisplay').text(`Pay: $${game.avatar.job.pay}/day`)
-      },
+
+      workLevel: 'unemployed',
+      exerciseLevel: '',
+      socialLevel: '',
+      studyLevel: '',
+      shopLevel:'', // or inventory object -- tbd
+
+
       getPromotion: ()=>{
-        if(game.avatar.job.title !='CTO') {
-          if(game.avatar.perf.workXP === game.jobMarket[Object.keys(game.jobMarket)[Object.keys(game.jobMarket).indexOf(game.avatar.job.id)+1]].workXP) {game.avatar.getJob((game.jobMarket[Object.keys(game.jobMarket)[Object.keys(game.jobMarket).indexOf(game.avatar.job.id)+1]]).id)
-          game.avatar.updateImg('happy')
-          if(typeof(game.avatar.job.img)!='undefined') {game.memoryWall.updateMemoryWall(game.avatar.job.img,game.avatar.job.frame)}
-          alert(`Congrats! Alita has been promoted to ${game.avatar.job.title}!`)}
+        if(game.avatar.workLevel.name !='CTO') {
+          const nextJob = game.workLibrary[game.avatar.workLevel.level+1]
+          o(nextJob)
+          if(game.avatar.perf.workXP >= nextJob.workXP && game.avatar.studyLevel >= nextJob.preReq) {
+            game.avatar.assignLevel('work',nextJob.level)
+            game.avatar.updateImg('happy')
+            if(typeof(game.avatar.workLevel.img)!='undefined') {game.memoryWall.updateMemoryWall(game.avatar.workLevel.img,game.avatar.workLevel.frame)}
+            alert(`Congrats! Alita has been promoted to ${game.avatar.workLevel.name}!`)}
+          }
+      },
+
+      assignLevel:(action,level)=>{
+        game.avatar[`${action}Level`] = game[`${action}Library`][level]
+        switch (action) {
+          case 'work':
+            $('#workNameDisplay').text(`Work: ${game.avatar.workLevel.name}`)
+            $('#workPayDisplay').text(`Pay: $${game.avatar.workLevel.pay}/day`)
+            break;
         }
-      },
-
-      exerciseLevel: (''),
-      getExerciseLevel: (levelNumber)=>{
-        game.avatar.exerciseLevel = game.exerciseLibrary[levelNumber]
-      },
-      socialLevel:'',
-      getSocialLevel: (levelNumber)=>{
-        game.avatar.socialLevel = game.socialLibrary[levelNumber]
-
-      },
-      studyLevel: '',
-      getStudyLevel: (levelNumber)=>{
-        game.avatar.studyLevel = game.studyLibrary[levelNumber]
-      },
-      studyLevel: '',
-      getStudyLevel: (levelNumber)=>{
-        game.avatar.studyLevel = game.studyLibrary[levelNumber]
       },
 
 
@@ -169,36 +161,34 @@ const game = {
       $('#workXPDisplay').text(`WorkXP: ${game.avatar.perf.workXP}`)
     },
 
+
     checkRequirement: (action) => { // loop through each? or call each function
       // check if avatar perf stat meets avatar action level requirement
           const avatarWants = game.avatar[`${action}Level`]
-            o(avatarWants)
-          // $
+          let activityName = avatarWants.name
+
+          // check bank account
           if (game.avatar.perf['wealth'] < avatarWants.cost) {
-            alert(`Alita does not have the $${avatarWants.cost} needed for ${avatarWants.name}.`)
+            switch (action) {case 'social': activityName = 'this social activity'; break;}
+            alert(`Alita does not have the $${avatarWants.cost} needed for ${activityName}.`)
             return false
           } else {return true}
 
-
-
-      // $
-
-
-      // social
-      // health
-      // happiness
-      // study
-      // time
+          // social
+          // health
+          // happiness
+          // study
+          // time
 
     },
     work: ()=>{
       if(game.avatar.perf.happiness<=5) {alert(`Alita is too depressed to work.`)}
       else if (game.avatar.perf.health <=5) {alert(`Alita isn't feeling physically well enough to work.`)}
       else {
-          game.avatar.perf.wealth+=game.avatar.job.pay
-          game.avatar.perf.happiness+=game.avatar.job.happiness
+          game.avatar.perf.wealth+=game.avatar.workLevel.pay
+          game.avatar.perf.happiness+=game.avatar.workLevel.happiness
           game.avatar.perf.workXP+=1
-          game.phone.incrementClock(game.avatar.job.time)
+          game.phone.incrementClock(game.avatar.workLevel.time)
           game.phone.updateMeters()
           game.avatar.updateImg()
           setTimeout(function(){game.avatar.getPromotion()},100)
@@ -211,9 +201,7 @@ const game = {
     },
     study: ()=>{
       if (game.phone.checkRequirement('study')) {
-        p(`has enough $`)
         if (game.avatar.perf.happiness < 0|| game.avatar.perf.social < 0|| game.avatar.perf.health < 0) {
-          o(game.avatar.perf)
           alert(`Alita can't concentrate on study anything right now. Try to help her feel better.`)
         } else {
             p(`This educational course is going to cost $${game.avatar.studyLevel.cost}`)
@@ -232,6 +220,7 @@ const game = {
       }
     },
     exercise: ()=>{
+      if (game.phone.checkRequirement('exercise')) {
       if(game.avatar.perf.social <=0) {alert(`Alita is lonely. She can't motivate herself to exercise.`)}
       else if (game.avatar.perf.health <=5) {alert(`Alita is not feeling physically well enough to work out right now.`)}
       else {
@@ -250,22 +239,25 @@ const game = {
           game.avatar.exerciseLevel=game.exerciseLibrary[game.avatar.exerciseLevel.level+1]
         }
       }
+    }
     },
-    socialize: ()=>{
-      if(game.avatar.perf.health<=5) {alert(`Alita is not feeling phsyically well enough to socialize.`)}
-      else {
-        p(`This social activity is going to cost $${game.avatar.socialLevel.cost}`)
-        p(game.avatar.socialLevel.name)
-        game.avatar.perf.social+=game.avatar.socialLevel.social
-        game.avatar.perf.happiness+=game.avatar.socialLevel.happiness
-        game.avatar.perf.wealth-=game.avatar.socialLevel.cost
-        game.avatar.perf.health+=game.avatar.socialLevel.health
-        game.avatar.perf.socialXP+=1
-        game.phone.incrementClock(2)
-        game.phone.updateMeters()
-        if(typeof(game.avatar.socialLevel.img)!='undefined') {game.memoryWall.updateMemoryWall(game.avatar.socialLevel.img,game.avatar.socialLevel.frame)}
-        game.avatar.socialLevel=game.socialLibrary[game.avatar.socialLevel.level+1]
-        game.avatar.updateImg()
+    social: ()=>{ // breaking verb rule here for consistency reasons
+      if (game.phone.checkRequirement('social')) {
+        if(game.avatar.perf.health<=5) {alert(`Alita is not feeling phsyically well enough to social.`)}
+        else {
+          p(`This social activity is going to cost $${game.avatar.socialLevel.cost}`)
+          p(game.avatar.socialLevel.name)
+          game.avatar.perf.social+=game.avatar.socialLevel.social
+          game.avatar.perf.happiness+=game.avatar.socialLevel.happiness
+          game.avatar.perf.wealth-=game.avatar.socialLevel.cost
+          game.avatar.perf.health+=game.avatar.socialLevel.health
+          game.avatar.perf.socialXP+=1
+          game.phone.incrementClock(2)
+          game.phone.updateMeters()
+          if(typeof(game.avatar.socialLevel.img)!='undefined') {game.memoryWall.updateMemoryWall(game.avatar.socialLevel.img,game.avatar.socialLevel.frame)}
+          game.avatar.socialLevel=game.socialLibrary[game.avatar.socialLevel.level+1]
+          game.avatar.updateImg()
+        }
       }
     },
     relax: ()=>{
@@ -274,10 +266,10 @@ const game = {
       game.avatar.updateImg('relaxed')
     }
   },
-  jobMarket: {
-    barista: {
-      title: 'Coffee Barista',
-      id: 'barista',
+  workLibrary: {
+    0: {
+      level: 0,
+      name: 'Coffee Barista',
       pay: 400/5,
       happiness: -5,
       study: 1,
@@ -285,9 +277,9 @@ const game = {
       workXP: 0
 
     },
-    manager: {
-      title: 'Coffee Shop Manager', // add photo - maybe
-      id: 'manager',
+    1: {
+      level: 1,
+      name: 'Coffee Shop Manager',
       pay: 610/5,
       happiness: -8,
       study: 1,
@@ -295,20 +287,20 @@ const game = {
       workXP: 5,
       img: 'coffeeShop',
       frame:1,
-      preReq: 'Business Management Online Course'
+      preReq: game.studyLibrary[0]
     },
-    dataEntry: {
-      title: 'Data Entry Specialist',
-      id: 'dataEntry',
+    2: {
+      level: 2,
+      name: 'Data Entry Specialist',
       pay: 250/5,
       happiness: -8,
       study: 1,
       time: 8,
       workXP: 10
     },
-    seniorDataEntry: {
-      title: 'Data Entry Associate',
-      id: 'seniorDataEntry',
+    3: {
+      level: 3,
+      name: 'Data Entry Associate',
       pay: 300/5,
       happiness: -12,
       study: 1,
@@ -316,9 +308,9 @@ const game = {
       workXP: 15,
       preReq:'Excel Online Course'
     },
-    juniorDev: {
-      title: 'Junior Software Developer', // add photo
-      id: 'juniorDev',
+    4: {
+      level: 4,
+      name: 'Junior Software Developer', // add photo
       pay: 1250/5,
       happiness: -5,
       study: 1,
@@ -326,18 +318,18 @@ const game = {
       workXP: 20,
       preReq:'Coding Bootcamp'
     },
-    midDev: {
-      title: 'Mid Level Software Developer',
-      id: 'midDev',
+    5: {
+      level: 5,
+      name: 'Mid Level Software Developer',
       pay: 1731/5,
       happiness: -4,
       study: 1,
       time: 8,
       workXP: 25
     },
-    seniorDev: {
-      title: 'Senior Software Developer',
-      id: 'seniorDev',
+    6: {
+      level: 6,
+      name: 'Senior Software Developer',
       pay: 2308/5,
       happiness: -3,
       study: 1,
@@ -345,9 +337,9 @@ const game = {
       workXP: 30,
       preReq:"Bachelor's Degree in Computer Science"
     },
-    cto: {
-      title: 'CTO', // add photo
-      id: 'cto',
+    7: {
+      level: 7,
+      name: 'CTO', // add photo
       pay: 10416/5,
       happiness: -20,
       study: 1,
@@ -356,7 +348,7 @@ const game = {
       preReq:'MBA'
     }
   },
-  store : {
+  shopLibrary : {
     // 0: {level:0, name:'bicycle',cost:500,img:''},
     // 1: {level:1, name: 'laptop',cost:1200,img:''},
     // 2: {level: 2: name: ''}
@@ -373,18 +365,18 @@ const game = {
 
   exerciseLibrary: {
     0: {level: 0, name: 'Walking to the Park', health: 1, happiness: 1, cost: 0, social: 0, img:'park',frame:6},
-    1: {level: 1, name: 'Free Beginner Yoga Videos', health: 2, happiness: 2, cost: 5, social: 0}, // add photo
+    1: {level: 1, name: 'Free Beginner Yoga Videos', health: 2, happiness: 2, cost: 0, social: 0}, // add photo
     2: {level: 2, name: 'Free Basic Strength Training Videos', health: 3, happiness: 3, cost: 0, social: 0},
-    3: {level: 3, name: '5K Running Plan App', health: 5, happiness: 5, cost: 5, social: 0}, // add photo
-    4: {level: 4, name: 'Intermediate Yoga Video Subscription', health: 5, happiness: 5, cost: 0, social: 0},
+    3: {level: 3, name: '5K Running Plan App', health: 5, happiness: 5, cost: 1, social: 0}, // add photo
+    4: {level: 4, name: 'Intermediate Yoga Video Subscription', health: 5, happiness: 2, cost: 5, social: 0},
     5: {level: 5, name: 'Intermediate Strength Training Video Subscription', health: 5, happiness: 5, cost: 0, social: 0},
-    6: {level: 6, name: '10k Running Plan App', health: 5, happiness: 5, cost: 0, social: 0},
-    7: {level: 7, name: 'Advanced Yoga Class Subscription', health: 5, happiness: 5, cost: 0, social: 0},
-    8: {level: 8, name: 'Advanced Strength Training Video Subscription', health: 5, happiness: 5, cost: 0, social: 0}, // add photo
-    9: {level: 9, name: 'Half Marathon Running Plan App', health: 5, happiness: 5, cost: 0, social: 0},
-    10: {level: 10, name: 'Aerial Silks Yoga', health: 5, happiness: 5, cost: 0, social: 0}, // add photo
-    11: {level: 11, name: 'High Intensity Interval Training', health: 5, happiness: 5, cost: 0, social: 0},
-    12: {level: 12, name: 'Marathon Running Plan App', health: 5, happiness: 5, cost: 0, social: 0} // add photo
+    6: {level: 6, name: '10k Running Plan App', health: 5, happiness: 5, cost: 5, social: 0},
+    7: {level: 7, name: 'Advanced Yoga Class Subscription', health: 5, happiness: 5, cost: 10, social: 0},
+    8: {level: 8, name: 'Advanced Strength Training Video Subscription', health: 5, happiness: 5, cost: 10, social: 0}, // add photo
+    9: {level: 9, name: 'Half Marathon Running Plan App', health: 5, happiness: 5, cost: 10, social: 0},
+    10: {level: 10, name: 'Aerial Silks Yoga', health: 5, happiness: 5, cost: 25, social: 0}, // add photo
+    11: {level: 11, name: 'High Intensity Interval Training', health: 5, happiness: 5, cost: 20, social: 0},
+    12: {level: 12, name: 'Marathon Running Plan App', health: 5, happiness: 5, cost: 25, social: 0} // add photo
   },
 
   socialLibrary: {
@@ -437,17 +429,11 @@ const game = {
 //JQUERY SETUP
 $(() => {
   game.phone.updateMeters()
-  $('#workButton').on('click',game.phone.work)
-  $('#shopButton').on('click',game.phone.shop)
-  $('#studyButton').on('click',game.phone.study)
-  $('#fitButton').on('click',game.phone.exercise)
-  $('#socialButton').on('click',game.phone.socialize)
-  $('#relaxButton').on('click',game.phone.relax)
 
-  game.avatar.getJob('barista')
-  game.avatar.getExerciseLevel(0)
-  game.avatar.getSocialLevel(0)
-  game.avatar.getStudyLevel(0)
+  for (let action of game.avatar.actions) {
+    game.avatar.assignLevel(action,0)
+    $(`#${action}Button`).on('click',game.phone[action])
+  }
   game.avatar.updateImg()
   game.avatar.walkIn()
 
