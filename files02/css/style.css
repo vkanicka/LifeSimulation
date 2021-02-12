@@ -24,6 +24,13 @@ body {
   display:grid;
 }
 
+#topPaint {
+  background-image: url('https://i.imgur.com/6kwO8nT.png');
+  background-position: center bottom;
+  margin-bottom: 20px;
+  display:grid;
+}
+
 #bottom {
   background-image: url('https://i.imgur.com/dBZu3Mp.png');
   background-position: left center;
@@ -86,6 +93,45 @@ body {
   position: absolute;
   left:20px;
   top: 110px;
+}
+
+#plant {
+  width: 150px;
+  position: absolute;
+  right:110px;
+  top:110px;
+}
+#rug {
+  width: 350px;
+  position: absolute;
+  left:300px;
+  bottom:0px;
+}
+#dresser {
+  width: 150px;
+  position: absolute;
+  left:300px;
+  bottom:45px;
+}
+#bed {
+  width: 400px;
+  position: absolute;
+  left:0px;
+  bottom:0px;
+}
+#laptop {
+  width: 95px;
+  position: absolute;
+  left:250px;
+  bottom:60px;
+
+}
+#car {
+  /* width: 300px; */
+  position: absolute;
+  left: 0px;
+  top: 130px;
+
 }
 
 .frame {

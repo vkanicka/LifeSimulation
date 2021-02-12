@@ -54,7 +54,7 @@ const randomizeColor=()=>{
 const game = {
 
   avatar: {
-      actions: ['work','study','exercise','social'],
+      actions: ['work','study','exercise','social','shop'],
       perf: {
           wealth: 0,
           social: 0,
@@ -202,10 +202,25 @@ const game = {
       }
     },
     shop: ()=>{
+      if (game.phone.checkRequirement('shop') && game.phone.clock.checkTime('shop')) {
+        p(`Alita bought a ${game.avatar.shopLevel.name}.`)
+        $(`#${game.avatar.shopLevel.name}`).show()
+        switch (game.avatar.shopLevel.name) {
+          case 'bed': $('#mattress').hide(); break;
+          case 'bicycle': $('#shoes').hide(); break;
+          case 'dresser': $('#suitcase').hide(); break;
+          case 'wallPaint': $('#top').attr('id','topPaint')
+        }
+        game.avatar.updatePerf('shop','wealth','happiness')
+        game.avatar.xp.shopXP+=1
+        game.phone.clock.incrementClock('shop')
+        game.phone.updateMeters()
+        game.avatar.updateImg()
+        game.phone.clock.toggleButtonClass()
+        if(game.avatar.shopLevel.level != 7) {game.avatar.shopLevel=game.shopLibrary[game.avatar.shopLevel.level+1]}
+      }
 
-      game.phone.updateMeters()
-      game.avatar.updateImg()
-      game.phone.clock.toggleButtonClass()
+
     },
     study: ()=>{
       if (game.phone.checkRequirement('study') && game.phone.clock.checkTime('study') && game.avatar.studyLevel.name != 'MBA') {
@@ -283,14 +298,14 @@ const game = {
     7: {level: 7, name: 'CTO', wealth: 10500/5, health:-1, happiness: -10, time: 8, workXP: 35, preReq:4}
   },
   shopLibrary : {
-    0: {level:0, name:'plant',wealth: -25,img:''},
-    1: {level:1, name:'rug',wealth: -100,img:''},
-    2: {level:2, name:'dresser',wealth: -200,img:''},
-    3: {level:3, name:'wall paint',wealth: -300,img:''},
-    4: {level:4, name:'bicycle',wealth: -500,img:''},
-    5: {level:5, name:'bed',wealth: -1000,img:''},
-    6: {level:6, name: 'laptop',wealth: -1200,img:''},
-    7: {level:7, name: 'car',wealth:-13000}
+    0: {level:0, name:'plant',wealth: -25,happiness:10, time:1},
+    1: {level:1, name:'rug',wealth: -100,happiness:10, time:1},
+    2: {level:2, name:'dresser',wealth: -200,happiness:10, time:1},
+    3: {level:3, name:'wallPaint',wealth: -300,happiness:10, time:1},//**
+    4: {level:4, name:'bicycle',wealth: -500,happiness:10, time:1},
+    5: {level:5, name:'bed',wealth: -1000,happiness:10, time:1},
+    6: {level:6, name:'laptop',wealth: -1200,happiness:50, time:1},
+    7: {level:7, name:'car',wealth:-13000,happiness:50, time:1}
   },
   studyLibrary: {
     0: {level:0, name: 'Business Management Online Course', time: 2, wealth: -400/5,study:15/5},
@@ -376,6 +391,19 @@ $(() => {
   $(`#relaxButton`).on('click',game.phone['relax'])
   game.avatar.updateImg()
   game.avatar.walkIn()
+
+  const shopImages = [
+  'plant',
+	'rug',
+	'dresser',
+	'wallPaint',
+	'bicycle',
+	'bed',
+	'laptop',
+  'car']
+  for (let buy of shopImages) {
+    $(`#${buy}`).hide()
+  }
 
   });
 
