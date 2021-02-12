@@ -81,6 +81,13 @@ body {
   top: 140px;
 }
 
+#bicycle {
+  width: 285px;
+  position: absolute;
+  left:20px;
+  top: 110px;
+}
+
 .frame {
   position: absolute;
   width: 100px;
@@ -223,6 +230,13 @@ body {
 
 .phoneButton:hover {
   background-color: #13CCC1;
+}
+
+.phoneButton:disabled {
+  background-color: black;
+  color: darkgray;
+  border-bottom-color: darkgray;
+  border-left-color: black;
 }
 
 #perfMeters {
