@@ -64,7 +64,7 @@ const game = {
     game.avatar.perf.health =  20
     game.avatar.perf.happiness =  6
     game.avatar.perf.study =  0
-    game.avatar.xp.workXP =  0
+    game.avatar.xp.workXP =  0 
     game.avatar.xp.exerciseXP =  0
     game.avatar.xp.socialXP = 0
     game.avatar.xp.studyXP = 0
@@ -73,7 +73,7 @@ const game = {
       game.avatar.assignLevel(action,0)
       $(`#${action}Button`).on('click',game.phone[action])
     }
-    game.phone.clock.countdownHours  =  16 
+    game.phone.clock.countdownHours  =  16
     game.phone.clock.hour =  7
     game.phone.clock.amPM =  'AM'
     $('#time').text(`${game.phone.clock.hour}:00 ${game.phone.clock.amPM}`)
