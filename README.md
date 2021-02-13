@@ -1,6 +1,11 @@
 # LifeSimulation
 Start from broke and work your way to a successful life!
 
+Wireframe:
+![Wireframe Imgage](https://i.imgur.com/5vAzY5R.png)
+
+User Story:
+
 User starts with almost no money in an empty apartment with only a pair of shoes, suitcase of basic clothes, air mattress and smartphone with internet access. 
 
 The user can take the following actions from their smartphone:
