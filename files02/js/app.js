@@ -52,7 +52,43 @@ const randomizeColor=()=>{
 
 
 const game = {
-
+  winGame:()=>{
+      if (game.avatar.workLevel.name === 'Junior Software Developer') {
+        if(!confirm(`Congrats you won the game! Would you like to keep on keeping on?`)) {game.resetGame()}
+      } else if(game.phone.calendar.year>=8) {if(!confirm(`Sorry, you didn't reach Alita's goals in time. Would you like to keep playing anyway?`)) {game.resetGame()}
+    }
+  },
+  resetGame:()=>{
+    game.avatar.perf.wealth= 0
+    game.avatar.perf.social= 0
+    game.avatar.perf.health =  20
+    game.avatar.perf.happiness =  6
+    game.avatar.perf.study =  0
+    game.avatar.xp.workXP =  0
+    game.avatar.xp.exerciseXP =  0
+    game.avatar.xp.socialXP = 0
+    game.avatar.xp.studyXP = 0
+    game.avatar.updateImg('default')
+    for (let action of game.avatar.actions) {
+      game.avatar.assignLevel(action,0)
+      $(`#${action}Button`).on('click',game.phone[action])
+    }
+    game.phone.clock.countdownHours  =  16
+    game.phone.clock.hour =  7
+    game.phone.clock.amPM =  'AM'
+    $('#time').text(`${game.phone.clock.hour}:00 ${game.phone.clock.amPM}`)
+    $('#day').text(`Day ${game.phone.calendar.day} Year ${game.phone.calendar.year}`)
+    game.phone.clock.toggleButtonClass()
+    game.phone.calendar.day =  1
+    game.phone.calendar.dayyear =  1
+    $('#time').text(`${game.phone.clock.hour}:00 ${game.phone.clock.amPM}`)
+    game.avatar.walkIn()
+    for (let buy of game.shopLibrary.shopImages) {
+      $(`#${buy}`).hide()
+    }
+    $('#topPaint').attr('id','top')
+    for (let i=0;i<10;i++) {$(`#frame${i}`).attr('src','https://i.imgur.com/BoHJ0Sk.png')}
+  },
   avatar: {
       actions: ['work','study','exercise','social','shop'],
       perf: {
@@ -103,7 +139,9 @@ const game = {
             game.avatar.assignLevel('work',nextJob.level)
             game.avatar.updateImg('happy')
             if(typeof(game.avatar.workLevel.img)!='undefined') {game.memoryWall.updateMemoryWall(game.avatar.workLevel.img,game.avatar.workLevel.frame)}
+
             alert(`Congrats! Alita has been promoted to ${game.avatar.workLevel.name}!`)}
+            game.winGame()
           }
       },
       assignLevel:(action,level)=>{
@@ -160,6 +198,7 @@ const game = {
         $('#time').text(`${game.phone.clock.hour}:00 ${game.phone.clock.amPM}`)
         game.avatar.updatePerf('sleep','health','happiness','social')
         game.phone.clock.toggleButtonClass()
+        if (game.phone.calendar.year === 8) {setTimeout(game.winGame(),500)}
       },
     },
     updateMeters: () => {
@@ -218,6 +257,7 @@ const game = {
         game.avatar.updateImg()
         game.phone.clock.toggleButtonClass()
         if(game.avatar.shopLevel.level != 7) {game.avatar.shopLevel=game.shopLibrary[game.avatar.shopLevel.level+1]}
+        if(game.phone.clock.countdownHours<=0){game.phone.calendar.newDay()} else {game.phone.clock.toggleButtonClass()}
       }
 
 
@@ -298,6 +338,15 @@ const game = {
     7: {level: 7, name: 'CTO', wealth: 10500/5, health:-1, happiness: -10, time: 8, workXP: 35, preReq:4}
   },
   shopLibrary : {
+    shopImages: [
+    'plant',
+  	'rug',
+  	'dresser',
+  	'wallPaint',
+  	'bicycle',
+  	'bed',
+  	'laptop',
+    'car'],
     0: {level:0, name:'plant',wealth: -25,happiness:10, time:1},
     1: {level:1, name:'rug',wealth: -100,happiness:10, time:1},
     2: {level:2, name:'dresser',wealth: -200,happiness:10, time:1},
@@ -392,16 +441,7 @@ $(() => {
   game.avatar.updateImg()
   game.avatar.walkIn()
 
-  const shopImages = [
-  'plant',
-	'rug',
-	'dresser',
-	'wallPaint',
-	'bicycle',
-	'bed',
-	'laptop',
-  'car']
-  for (let buy of shopImages) {
+  for (let buy of game.shopLibrary.shopImages) {
     $(`#${buy}`).hide()
   }
 
@@ -420,6 +460,8 @@ const closeModal = () => {
 //Event Listeners
 $howToPlayButton.on('click', openModal)
 $closeBtn.on('click', closeModal)
+
+$('#resetGameButton').on('click', game.resetGame)
 
   });
 
