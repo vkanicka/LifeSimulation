@@ -123,7 +123,7 @@ const game = {
         else {
           state='default'
         }
-        $('#avatar').attr('src',game.avatar.moodImages[state])
+        $('#avatar').attr('src',game.avatar.moodImages[state]) 
       },
       workLevel: 'unemployed',
       exerciseLevel: '',
