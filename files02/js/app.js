@@ -223,7 +223,7 @@ const game = {
 
     },
     study: ()=>{
-      if (game.phone.checkRequirement('study') && game.phone.clock.checkTime('study') && game.avatar.studyLevel.name != 'MBA') {
+      if (game.phone.checkRequirement('study') && game.phone.clock.checkTime('study')) {
         if (game.avatar.perf.happiness < 0|| game.avatar.perf.social < 0|| game.avatar.perf.health < 0) {
           alert(`Alita can't concentrate on study anything right now. Try to help her feel better.`)
         } else {
@@ -233,7 +233,7 @@ const game = {
             game.phone.clock.incrementClock('study')
             game.phone.updateMeters()
             game.avatar.updateImg()
-            if(game.avatar.xp.studyXP%5===0) {
+            if(game.avatar.xp.studyXP%5===0 && game.avatar.studyLevel.name != 'MBA') {
               p(`Alita completed a ${game.avatar.studyLevel.name}!`)
               if(typeof(game.avatar.studyLevel.img)!='undefined') {game.memoryWall.updateMemoryWall(game.avatar.studyLevel.img,game.avatar.studyLevel.frame)}
               game.avatar.studyLevel=game.studyLibrary[game.avatar.studyLevel.level+1]
@@ -245,7 +245,7 @@ const game = {
     exercise: ()=>{
       if (game.phone.checkRequirement('exercise') && game.phone.clock.checkTime('exercise')) {
       if(game.avatar.perf.social <=0) {alert(`Alita is lonely. She can't motivate herself to exercise.`)}
-      else if (game.avatar.perf.health <=5) {alert(`Alita is not feeling physically well enough to work out right now.`)}
+      else if (game.avatar.perf.health <=5) {alert(`Alita is not feeling physically well enough to exercise right now.`)}
       else {
         game.avatar.updatePerf('exercise','health','wealth','happiness')
         game.avatar.xp.exerciseXP+=1
@@ -253,7 +253,7 @@ const game = {
         game.phone.updateMeters()
         game.avatar.updateImg()
 
-        if(game.avatar.xp.exerciseXP%5===0) {
+        if(game.avatar.xp.exerciseXP%8===0) {
           p(`Alita mastered ${game.avatar.exerciseLevel.name}!`)
           if(typeof(game.avatar.exerciseLevel.img)!='undefined') {game.memoryWall.updateMemoryWall(game.avatar.exerciseLevel.img,game.avatar.exerciseLevel.frame)}
           game.avatar.exerciseLevel=game.exerciseLibrary[game.avatar.exerciseLevel.level+1]
@@ -263,7 +263,7 @@ const game = {
     }
     },
     social: ()=>{ // breaking verb rule here for consistency reasons
-      if (game.phone.checkRequirement('social') & game.phone.clock.checkTime('social')) {
+      if (game.phone.checkRequirement('social') && game.phone.clock.checkTime('social')) {
         if(game.avatar.perf.health<=5) {alert(`Alita is not feeling phsyically well enough to social.`)}
         else {
           p(game.avatar.socialLevel.name)
@@ -335,7 +335,7 @@ const game = {
     2: {level: 2, social: 2, time:1, happiness:-5, wealth: -0, health:0, name: 'Alita chatted on a dating app. Meh.'},
     3: {level: 3, social: 50, time:4, happiness:20, wealth: 25, health:0, img:'murderMystery',frame:4, name: 'Alita went to a murder mystery game meetup. It was so much fun! She made a new friend: Savannah.'},
     4: {level: 4, social: 5, time:2, happiness:10, wealth: -10, health:8,img:'yoga1',frame:7, name: 'Alita went to a yoga class with Savannah.'},
-    5: {level: 5, social: 50, time: 5, happiness:0, wealth: -200, health: -40, img:'party',frame:3, name: "Alita went to a party with Savannah. They stayed out very late. Alita may be tired. Take it easy today."},
+    5: {level: 5, social: 50, time: 5, happiness:0, wealth: -200, health: -8, img:'party',frame:3, name: "Alita went to a party with Savannah. They stayed out very late. Alita may be tired. Take it easy today."},
     6: {level: 6, social: 25, time:1, happiness:10, wealth: -0, health:0, img:'falco',frame:5, name: 'Alita made a new friend at work: Falco. They both love coding.'},
     7: {level: 7, social: 25, time:2, happiness:50, wealth: -300, health:10,img:'dog',frame:8, name: 'Alita adopted a dog: Charlie!'},
     8: {level: 8, social: 10, time:3, happiness:5, wealth: -0, health:0, name: 'Alita and Falco went to a coding meetup group together.'},
@@ -404,6 +404,22 @@ $(() => {
   for (let buy of shopImages) {
     $(`#${buy}`).hide()
   }
+
+  //Grabbing Elements
+const $howToPlayButton = $('#howToPlayButton')
+const $modal = $('#howToModal')
+const $closeBtn = $('#close')
+//Event Handlers
+const openModal = () => {
+  $modal.css('display', 'block')
+}
+const closeModal = () => {
+  $modal.css('display', 'none')
+}
+
+//Event Listeners
+$howToPlayButton.on('click', openModal)
+$closeBtn.on('click', closeModal)
 
   });
 
