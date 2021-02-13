@@ -64,9 +64,9 @@ const game = {
     game.avatar.perf.health =  20
     game.avatar.perf.happiness =  6
     game.avatar.perf.study =  0
-    game.avatar.xp.workXP =  0 
+    game.avatar.xp.workXP =  0
     game.avatar.xp.exerciseXP =  0
-    game.avatar.xp.socialXP = 0
+    game.avatar.xp.socialXP = 0 
     game.avatar.xp.studyXP = 0
     game.avatar.updateImg('default')
     for (let action of game.avatar.actions) {

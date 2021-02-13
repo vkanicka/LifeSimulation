@@ -5,8 +5,8 @@ body {
   background-color: black;
   color: gray;
   font-family: 'Montserrat', sans-serif;
-  font-size:20px;  
-  margin: 20px;
+  font-size:20px;
+  margin: 20px; 
 }
 .half {
   height: 300px;
