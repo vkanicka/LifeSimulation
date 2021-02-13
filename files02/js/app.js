@@ -66,7 +66,7 @@ const game = {
     game.avatar.perf.study =  0
     game.avatar.xp.workXP =  0
     game.avatar.xp.exerciseXP =  0
-    game.avatar.xp.socialXP = 0 
+    game.avatar.xp.socialXP = 0
     game.avatar.xp.studyXP = 0
     game.avatar.updateImg('default')
     for (let action of game.avatar.actions) {
@@ -154,8 +154,7 @@ const game = {
         }
       },
       walkIn: () => {
-        $thisAvatar = $('#avatar')
-        $thisAvatar.css({'left':'400px','transition':'3s','steps':('3', 'jump-start')})},
+        $('#avatar').css({'left':'400px','transition':'3s','steps':('3', 'jump-start')})},
   },
   phone: {
     clock: {
@@ -219,12 +218,17 @@ const game = {
             alert(`Alita does not have the $${-avatarWants.wealth} needed for ${activityName}.`)
             return false
           } else {return true}
-
           // social
           // health
           // happiness
           // study
           // time
+    },
+    notify: (input)=> {
+      $notification = $('#notification')
+      $notification.hide('fast')
+      $('#notification').text(input)
+      $notification.show('slow')
 
     },
     work: ()=>{
@@ -242,7 +246,7 @@ const game = {
     },
     shop: ()=>{
       if (game.phone.checkRequirement('shop') && game.phone.clock.checkTime('shop')) {
-        p(`Alita bought a ${game.avatar.shopLevel.name}.`)
+        game.phone.notify(`Alita bought a ${game.avatar.shopLevel.name}.`)
         $(`#${game.avatar.shopLevel.name}`).show()
         switch (game.avatar.shopLevel.name) {
           case 'bed': $('#mattress').hide(); break;
@@ -268,13 +272,13 @@ const game = {
           alert(`Alita can't concentrate on study anything right now. Try to help her feel better.`)
         } else {
             game.avatar.updatePerf('study','study','wealth')
-            p(`Alita attended one session of a ${game.avatar.studyLevel.name}.`)
+            game.phone.notify(`Alita attended one session of a ${game.avatar.studyLevel.name}.`)
             game.avatar.xp.studyXP+=1
             game.phone.clock.incrementClock('study')
             game.phone.updateMeters()
             game.avatar.updateImg()
             if(game.avatar.xp.studyXP%5===0 && game.avatar.studyLevel.name != 'MBA') {
-              p(`Alita completed a ${game.avatar.studyLevel.name}!`)
+              game.phone.notify(`Alita completed a ${game.avatar.studyLevel.name}!`)
               if(typeof(game.avatar.studyLevel.img)!='undefined') {game.memoryWall.updateMemoryWall(game.avatar.studyLevel.img,game.avatar.studyLevel.frame)}
               game.avatar.studyLevel=game.studyLibrary[game.avatar.studyLevel.level+1]
             }
@@ -294,7 +298,7 @@ const game = {
         game.avatar.updateImg()
 
         if(game.avatar.xp.exerciseXP%8===0) {
-          p(`Alita mastered ${game.avatar.exerciseLevel.name}!`)
+          game.phone.notify(`Alita mastered ${game.avatar.exerciseLevel.name}!`)
           if(typeof(game.avatar.exerciseLevel.img)!='undefined') {game.memoryWall.updateMemoryWall(game.avatar.exerciseLevel.img,game.avatar.exerciseLevel.frame)}
           game.avatar.exerciseLevel=game.exerciseLibrary[game.avatar.exerciseLevel.level+1]
         }
@@ -306,7 +310,7 @@ const game = {
       if (game.phone.checkRequirement('social') && game.phone.clock.checkTime('social')) {
         if(game.avatar.perf.health<=5) {alert(`Alita is not feeling phsyically well enough to social.`)}
         else {
-          p(game.avatar.socialLevel.name)
+          game.phone.notify(game.avatar.socialLevel.name)
           game.avatar.updatePerf('social','social','happiness','wealth','health')
           game.avatar.xp.socialXP+=1
           game.phone.clock.incrementClock('social')
@@ -444,6 +448,8 @@ $(() => {
   for (let buy of game.shopLibrary.shopImages) {
     $(`#${buy}`).hide()
   }
+
+  $('#notification').hide()
 
   //Grabbing Elements
 const $howToPlayButton = $('#howToPlayButton')

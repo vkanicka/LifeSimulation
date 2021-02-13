@@ -6,7 +6,7 @@ body {
   color: gray;
   font-family: 'Montserrat', sans-serif;
   font-size:20px;
-  margin: 20px; 
+  margin: 20px;
 }
 .half {
   height: 300px;
@@ -26,6 +26,20 @@ body {
   background-position: center bottom;
   margin-bottom: 20px;
   display:grid;
+}
+
+
+
+#notification {
+  position: absolute;
+  right: 10px;
+  top:70px;
+  background-color: rgb(255,255,255,.8);
+  border-radius: 20px;
+  padding: 10px;
+  font-size: 15px;
+  width: 150px;
+
 }
 #bottom {
   background-image: url('https://i.imgur.com/dBZu3Mp.png');
@@ -48,10 +62,10 @@ body {
 }
 
 .modal {
-	background-color: rgba(0,0,0,0.7);
+	background-color: rgba(0,0,0,0.8);
 	position: fixed;
 	top: 0;
-	left: -215px;
+	/* left: -215px; */
 	height: 100%;
 	width: 100%;
 	z-index: 1;
@@ -98,6 +112,7 @@ body {
 	color: black;
 	box-shadow: 0.2rem 0.2rem 0 darkgray;
   transform: translate(-0.2rem, -0.2rem);
+  transition-duration: 0.5s;
 }
 #modal-footer {
 	text-align: right;
@@ -323,6 +338,7 @@ body {
 }
 .phoneButton:hover {
   background-color: #13CCC1;
+  transition-duration: 0.5s;
 }
 .phoneButton:disabled {
   background-color: black;
