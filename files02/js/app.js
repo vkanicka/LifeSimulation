@@ -73,7 +73,7 @@ const game = {
       game.avatar.assignLevel(action,0)
       $(`#${action}Button`).on('click',game.phone[action])
     }
-    game.phone.clock.countdownHours  =  16
+    game.phone.clock.countdownHours  =  16 
     game.phone.clock.hour =  7
     game.phone.clock.amPM =  'AM'
     $('#time').text(`${game.phone.clock.hour}:00 ${game.phone.clock.amPM}`)
